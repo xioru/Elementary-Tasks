@@ -2,27 +2,57 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"strconv"
 	"strings"
 )
 
-func draw(x, y int) {
-	symbol := "*"
-	var lineArr []string
-	for i := 0; i < x; i++ {
-		lineArr = append(lineArr, symbol)
+func getArgs() (int, int) {
+	argsArray := os.Args[1:]
+	if len(argsArray) != 2 {
+		fmt.Println("Должно быть два аргумента")
+		os.Exit(1)
 	}
-	for i := 0; i < y; i++ {
-		if i%2 == 0 {
-			fmt.Println(strings.Join(lineArr, " "))
-		} else {
-			fmt.Println(" ", strings.Join(lineArr, " "))
-		}
+	width, err := strconv.Atoi(argsArray[0])
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	height, err := strconv.Atoi(argsArray[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	return width, height
 }
 
-var x int = 5
-var y int = 5
+func makeLine(width int) string {
+	symbol := "*"
+	blank := " "
+
+	var sliceOfStars []string
+	for i := 0; i < width; i++ {
+		sliceOfStars = append(sliceOfStars, symbol)
+	}
+	line := strings.Join(sliceOfStars, blank)
+	return line
+}
+
+func drawField(height int, line string) string {
+	blank := " "
+	var board string
+	for i := 0; i < height; i++ {
+		if i%2 == 0 {
+			board += line + blank + "\n"
+		} else {
+			board += blank + line + "\n"
+		}
+	}
+	return board
+}
 
 func main() {
-	draw(x, y)
+	width, height := getArgs()
+	line := makeLine(width)
+	fmt.Println(drawField(height, line))
 }
