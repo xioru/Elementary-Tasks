@@ -41,7 +41,7 @@ func main() {
 	if dataInput() {
 		fmt.Print("Result is: ")
 		for ind, res := range findNeededNumbers() {
-			if ind > 0 { // не поставить перед первым
+			if ind > 0 {
 				fmt.Print(delimiter)
 			}
 			fmt.Printf("%d", res)
