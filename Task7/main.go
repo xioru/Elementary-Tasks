@@ -11,49 +11,44 @@ var (
 )
 
 const (
-	delimiter = ", "
-)
+	delimiter    = ", "
+	Instructions = `(You should specify natural number(>=0) to analyze by passing it to function call)
+	(task7 -n 225	Will print 'Result is: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14`)
 
-func main() {
-	if dataInput() {
-		fmt.Print("Result is: ")
-		// ind это позиция элемента в слайсе
-		// res это значение элемента в слайсе
-		for ind, res := range findNeededNumbers() {
-			// ind = 1
-			// res = 2
-			if ind > 0 {
-				fmt.Print(delimiter)
-			}
-			fmt.Printf("%d", res) //Вывод целых чисел в десятичной системе
-		}
-		fmt.Println()
-
-	} else {
-		printInstructions()
-	}
+func dataInput() bool {
+	flag.Parse()
+	successfulInput := (num >= 0)
+	return successfulInput
 }
 
 func findNeededNumbers() []int {
-	bound := int(math.Sqrt(float64(num))) // bound check?
+	bound := int(math.Sqrt(float64(num)))
 	if bound*bound >= num {
 		bound--
 	}
-	result := make([]int, bound+1) //+1 is for 0 value
+	result := make([]int, bound+1)
 	for i := 0; i <= bound; i++ {
 		result[i] = i
 	}
 	return result
 }
 
-func dataInput() bool {
+func init() {
 	flag.IntVar(&num, "n", 0, "Number to analyze")
-	flag.Parse()
-	successfulInput := (num >= 0)
-	return successfulInput
 }
 
-func printInstructions() {
-	fmt.Println("You should specify natural number(>=0) to analyze by passing it to function call")
-	fmt.Println("\ttask7 -n 225\t//will print 'Result is: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14'")
+func main() {
+	if dataInput() {
+		fmt.Print("Result is: ")
+		for ind, res := range findNeededNumbers() {
+			if ind > 0 { // не поставить перед первым
+				fmt.Print(delimiter)
+			}
+			fmt.Printf("%d", res)
+		}
+		fmt.Println()
+
+	} else {
+		fmt.Println(Instructions)
+	}
 }
